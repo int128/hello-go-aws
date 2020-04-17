@@ -8,6 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/aws/endpoints"
 	"github.com/aws/aws-sdk-go-v2/aws/external"
+	"github.com/aws/aws-sdk-go-v2/aws/stscreds"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
@@ -16,7 +17,9 @@ func init() {
 }
 
 func run(ctx context.Context) error {
-	cfg, err := external.LoadDefaultAWSConfig()
+	cfg, err := external.LoadDefaultAWSConfig(
+		external.WithMFATokenFunc(stscreds.StdinTokenProvider),
+	)
 	if err != nil {
 		return fmt.Errorf("unable to load SDK config: %w", err)
 	}
