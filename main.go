@@ -18,12 +18,12 @@ func init() {
 
 func run(ctx context.Context) error {
 	cfg, err := external.LoadDefaultAWSConfig(
+		external.WithRegion(endpoints.UsWest2RegionID),
 		external.WithMFATokenFunc(stscreds.StdinTokenProvider),
 	)
 	if err != nil {
 		return fmt.Errorf("unable to load SDK config: %w", err)
 	}
-	cfg.Region = endpoints.UsWest2RegionID
 	s3c := s3.New(cfg)
 	resp, err := s3c.ListBucketsRequest(nil).Send(ctx)
 	if err != nil {
